@@ -1,0 +1,46 @@
+{
+  "id": "FEAT-001",
+  "type": "feat",
+  "description": "Complete missing edit/update/destroy/show CRUD for four modules: Breeding, Milk Productions, Sales, and Animal Health. All four controllers already have index/create/store. Routes are currently limited with ->only([...]). Views have no edit/show pages and no edit/delete buttons on index tables.",
+  "status": "completed",
+  "steps": [
+    "1. Edit routes/web.php: move Route::resource('breedings',...), Route::resource('milk-productions',...), Route::resource('sales',...) inside the ['auth','verified'] middleware group. Remove all ->only([...]) restrictions from these three plus 'animal-health' so all four become full resources.",
+    "2. Edit app/Http/Controllers/BreedingController.php: add edit(Breeding $breeding), update(Request $request, Breeding $breeding), destroy(Breeding $breeding). edit() loads female/male animal lists (same as create). update() uses identical validation rules as store() then calls $breeding->update($validated). destroy() calls $breeding->delete() then redirects with flash.",
+    "3. Create resources/views/breedings/edit.blade.php: copy structure from resources/views/breedings/create.blade.php; change form action to route('breedings.update', $breeding) with @method('PUT'); pre-fill every field using old('field', $breeding->field) — use $breeding->mating_date->format('Y-m-d') etc for date fields; use @include('layouts.farm-sidebar', ['active' => 'breedings']); apply full theme (bg-[#f4f7f3], rounded-2xl cards, bg-[#123e31] primary button, rounded-xl inputs with green focus ring); show session('success')/session('error') flash.",
+    "4. Create resources/views/breedings/show.blade.php: read-only detail card showing female animal, male animal, mating date, breeding method, expected calving, actual calving, status, notes. Same sidebar + theme. Back button to route('breedings.index').",
+    "5. Edit resources/views/breedings/index.blade.php: replace the single 'view animal' anchor in the actions column with three separate icon buttons: View (link to route('breedings.show',$breeding)), Edit (link to route('breedings.edit',$breeding)), Delete (<form method='POST' action='route(breedings.destroy,$breeding)'>@csrf @method('DELETE')<button type='submit'>trash icon</button></form>).",
+    "6. Edit app/Http/Controllers/MilkProductionController.php: add show(MilkProduction $milkProduction), edit(MilkProduction $milkProduction), update(Request $request, MilkProduction $milkProduction), destroy(MilkProduction $milkProduction). edit() loads active dairy animals. update() uses same validation as store() then $milkProduction->update($validated). show() returns milk-productions.show view.",
+    "7. Create resources/views/milk-productions/edit.blade.php: mirror create.blade.php; pre-fill fields; PUT method override; sidebar + full theme.",
+    "8. Create resources/views/milk-productions/show.blade.php: read-only card with animal, date, session, quantity, notes. Sidebar + theme.",
+    "9. Edit resources/views/milk-productions/index.blade.php (read file first): add Edit link and Delete form to the actions column of each row.",
+    "10. Edit app/Http/Controllers/SaleController.php: add show(Sale $sale), edit(Sale $sale), update(Request $request, Sale $sale), destroy(Sale $sale). update() uses same validation as store(), recalculates total_amount = quantity * unit_price, does NOT regenerate sale_number. show() returns sales.show.",
+    "11. Create resources/views/sales/edit.blade.php: mirror sales/create.blade.php; pre-fill all fields; keep the JS total-preview script and animal-filtering script; PUT method override; sidebar + theme.",
+    "12. Create resources/views/sales/show.blade.php: read-only detail showing sale_number, type, animal, buyer_name, buyer_phone, item_description, quantity, unit_price, total_amount, sale_date, notes. Sidebar + theme.",
+    "13. Edit resources/views/sales/index.blade.php (read file first): add Edit link and Delete form to each row.",
+    "14. Edit app/Http/Controllers/AnimalHealthController.php: add show(AnimalHealth $animalHealth), edit(AnimalHealth $animalHealth), update(Request $request, AnimalHealth $animalHealth), destroy(AnimalHealth $animalHealth). edit() loads Animal::orderBy('animal_id')->get(). update() uses same validation as store(). Note: AnimalHealth uses $table = 'animal_health' and route model binding key is 'animal_health' (Laravel default for the resource name).",
+    "15. Create resources/views/animal-health/edit.blade.php: mirror create.blade.php; pre-fill all fields including date fields formatted Y-m-d; PUT override; sidebar with active='animal-health'; full theme.",
+    "16. Create resources/views/animal-health/show.blade.php: read-only health record detail (animal, checkup date, status, disease, symptoms, treatment, medicine, next checkup, notes). Sidebar + theme.",
+    "17. Edit resources/views/animal-health/index.blade.php (read file first): add Edit link and Delete form to each row's actions column."
+  ],
+  "acceptance_criteria": [
+    "php artisan route:list --path=breedings shows 7 routes including PUT breedings/{breeding} and DELETE breedings/{breeding}",
+    "php artisan route:list --path=milk-productions shows 7 routes",
+    "php artisan route:list --path=sales shows 7 routes",
+    "php artisan route:list --path=animal-health shows 7 routes",
+    "GET /breedings/{id}/edit renders a pre-filled form with the correct values",
+    "Submitting the edit form updates the record and redirects to index with a success flash message",
+    "Submitting the delete form removes the record and redirects to index with a success flash message",
+    "GET /breedings/{id} renders a read-only show page",
+    "Same four criteria apply to milk-productions, sales, and animal-health"
+  ],
+  "verification": [
+    "php artisan route:list --path=breedings",
+    "php artisan route:list --path=milk-productions",
+    "php artisan route:list --path=sales",
+    "php artisan route:list --path=animal-health",
+    "Open http://localhost/DairyBeefFarm/public/breedings in browser, click Edit on a record, verify form is pre-filled, submit, verify flash message",
+    "Click Delete on a record, verify it is removed"
+  ],
+  "blocked_reason": null,
+  "findings": "Route model binding params confirmed: breedings={breeding}, milk-productions={milk_production}, sales={sale}, animal-health={animal_health}. The milk-productions index page uses a GROUP BY query (animal_id + production_date) that has no individual record id in its result set; solved by adding MIN(id) AS representative_id to the grouped select so edit/delete buttons can reference an actual record id. All four resource groups were placed inside the existing auth middleware group in web.php."
+}

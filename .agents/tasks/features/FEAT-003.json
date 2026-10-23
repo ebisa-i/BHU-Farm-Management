@@ -1,0 +1,38 @@
+{
+  "id": "FEAT-003",
+  "type": "feat",
+  "description": "User Management: the users table has no role/status columns; the controller is a stub (index only); the index view uses derived/demo data and placeholder action buttons. Add columns via migration, update the User model, build full CRUD in the controller, register a resource route, create create/edit views, and rewrite index.blade.php to use real DB columns and live action buttons. Replace the inline sidebar with the shared farm-sidebar partial. Independent of FEAT-001 and FEAT-002.",
+  "status": "pending",
+  "steps": [
+    "1. Run: php artisan make:migration add_role_and_status_to_users_table. In up(): $table->string('role')->default('Team Leader'); $table->string('status')->default('Active'); In down(): $table->dropColumn(['role','status']). File: database/migrations/<timestamp>_add_role_and_status_to_users_table.php.",
+    "2. Run: php artisan migrate. Verify it exits 0.",
+    "3. Edit app/Models/User.php: the model uses a PHP 8 attribute #[Fillable(['name','email','password'])]. Change to #[Fillable(['name','email','password','role','status'])]. Do not change the #[Hidden] attribute or the casts() method.",
+    "4. Edit app/Http/Controllers/UserManagementController.php: replace with full resource controller. Define $roles = ['System Administrator','Team Leader','Vocational Worker','Student/Researcher','University Management'] as a private const or local variable in each method. index(): $users = User::latest()->paginate(15); $totalUsers = User::count(); $activeUsers = User::where('status','Active')->count(); return view('user-management.index', compact('users','totalUsers','activeUsers')). create(): return view('user-management.create', ['roles' => $roles]). store(): validate name (required,string,max:255), email (required,email,max:255,unique:users), password (required,string,min:8,confirmed), role (required,in:$roles), status (required,in:['Active','Inactive']); $validated['password'] = Hash::make($validated['password']); User::create($validated); redirect to user-management.index with flash 'User created successfully.' edit(User $userManagement): note the route parameter name is 'userManagement' because Laravel converts 'user-management' resource to camelCase; return view('user-management.edit', ['user' => $userManagement, 'roles' => $roles]). update(Request $request, User $userManagement): validate name (required,string,max:255), email (required,email,unique:users,id=userManagement->id), role (required,in:$roles), status (required,in:['Active','Inactive']), password (nullable,string,min:8,confirmed); if $request->filled('password') add hashed password to update data; $userManagement->update($data); redirect with flash. destroy(User $userManagement): if ($userManagement->id === auth()->id()) redirect back with error 'Cannot delete your own account.'; else $userManagement->delete(); redirect with flash.",
+    "5. Edit routes/web.php: inside the auth middleware group, replace the standalone Route::get('/user-management',...)->name('user-management.index') with Route::resource('user-management', UserManagementController::class). Add use Illuminate\\Support\\Facades\\Hash; to UserManagementController if not already imported.",
+    "6. Create resources/views/user-management/create.blade.php: wrap in <x-app-layout>. Full lg:flex layout with @include('layouts.farm-sidebar', ['active' => 'user-management']). Top header bar. Page bg-[#f4f7f3]. Card rounded-2xl. Form fields: name (text), email (email), password (password, required), password_confirmation (password, required), role (select from $roles), status (select: Active/Inactive). Input style: rounded-xl border border-[#d3e1d8] focus:border-green-600 focus:ring-green-600. Primary button bg-[#123e31] rounded-xl. Cancel link back to route('user-management.index'). Validation errors block. Flash messages.",
+    "7. Create resources/views/user-management/edit.blade.php: mirror create.blade.php. Form action route('user-management.update', $user) with @method('PUT') @csrf. Pre-fill name, email, role, status with old() + model values. Password and password_confirmation fields are optional — add helper text 'Leave blank to keep current password'. Show validation errors. Flash messages.",
+    "8. Edit resources/views/user-management/index.blade.php: a) Replace the inline <aside> block with @include('layouts.farm-sidebar', ['active' => 'user-management']). b) Remove the @php $demoRoles / $role cycling / $isActive demo logic from the table rows. c) Replace with real columns: Display name = $user->name; Username = Str::before($user->email,'@'); Role = $user->role (real DB column); Status badge: if $user->status === 'Active' use green pill else amber pill. d) Update 'Add User' button to link to route('user-management.create'). e) Replace <button type='button'> Edit placeholder with <a href='route(user-management.edit,$user)'>edit icon</a>. f) Replace <button type='button'> Delete placeholder with <form method='POST' action='route(user-management.destroy,$user)'>@csrf @method('DELETE')<button type='submit'>trash icon</button></form>. g) Update stat summary at top if present to use $totalUsers and $activeUsers passed from controller. h) Make sure Str is imported in the Blade file (@php use Illuminate\\Support\\Str; @endphp) or use the already-available Str facade since it is auto-imported in Blade."
+  ],
+  "acceptance_criteria": [
+    "php artisan migrate runs without error",
+    "php artisan route:list --path=user-management shows 7 routes",
+    "GET /user-management/create renders the create form",
+    "Submitting the create form creates a user with hashed password and real role/status, redirects with flash",
+    "The index table shows real role and status columns (not derived demo values)",
+    "Status badge is green for Active and amber for Inactive based on real DB value",
+    "Edit icon is a real link to the edit form; submitting updates name/email/role/status",
+    "Password update is optional on edit (blank = keep current)",
+    "Delete form removes the user; attempting to delete own account shows error flash instead"
+  ],
+  "verification": [
+    "php artisan migrate",
+    "php artisan route:list --path=user-management",
+    "Open http://localhost/DairyBeefFarm/public/user-management/create",
+    "Fill name, email, password, confirm, role, status and submit — verify user appears in index with correct role/status badge",
+    "Click Edit on a user, change role to 'Vocational Worker', submit, verify change in index",
+    "Click Delete on a user that is not the currently logged-in user, verify removal",
+    "Attempt to delete the logged-in user's own account, verify error flash appears instead"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}

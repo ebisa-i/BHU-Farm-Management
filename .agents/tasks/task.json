@@ -1,0 +1,7 @@
+{
+  "task_id": "task-dairybeefffarm-full-crud",
+  "task_description": "Complete all missing CRUD operations for Breeding, Milk Productions, Sales, and Animal Health; build Staff Activities full CRUD from a nearly-empty schema; build User Management full CRUD including schema migrations; wire real DB data throughout; apply consistent dark-green Tailwind theme across all new and updated views.",
+  "status": "pending",
+  "feature_order": ["FEAT-001", "FEAT-002", "FEAT-003"],
+  "blocked_reason": null
+}

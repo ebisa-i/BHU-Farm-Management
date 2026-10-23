@@ -1,0 +1,36 @@
+{
+  "id": "FEAT-002",
+  "type": "feat",
+  "description": "Staff Activities: the table exists (id + timestamps only) and the controller is a stub (index only, returns hardcoded data). Add 8 columns via a new migration, fill the model, build full CRUD in the controller, register a resource route, create create/edit views, and rewrite index.blade.php to use real DB data and live action buttons. Replace the inline sidebar with the shared farm-sidebar partial.",
+  "status": "pending",
+  "steps": [
+    "1. Run: php artisan make:migration add_fields_to_staff_activities_table. In the generated migration up(): $table->string('staff_name'); $table->string('role'); $table->string('assignment'); $table->string('shift'); $table->string('activity'); $table->string('status')->default('Scheduled'); $table->date('activity_date'); $table->text('notes')->nullable(); In down(): drop each column. File: database/migrations/<timestamp>_add_fields_to_staff_activities_table.php.",
+    "2. Run: php artisan migrate. Verify it exits 0.",
+    "3. Edit app/Models/StaffActivity.php: replace empty class body with protected $fillable = ['staff_name','role','assignment','shift','activity','status','activity_date','notes'] and protected function casts(): array { return ['activity_date' => 'date']; }.",
+    "4. Edit app/Http/Controllers/StaffActivityController.php: replace stub with full resource controller. index(): $activities = StaffActivity::latest()->paginate(15); $todayCount = StaffActivity::whereDate('activity_date', today())->count(); $completedCount = StaffActivity::where('status','Completed')->count(); $totalCount = StaffActivity::count(); $upcomingRecord = StaffActivity::where('status','Scheduled')->whereDate('activity_date','>=',today())->orderBy('activity_date')->first(); return view('staff-activities.index', compact('activities','todayCount','completedCount','totalCount','upcomingRecord')). create(): return view('staff-activities.create'). store(): validate all 8 fields (staff_name/role/assignment/shift/activity required string max:255; status required in:['Scheduled','In Progress','Completed','Cancelled']; activity_date required date; notes nullable string max:5000). Create record, redirect to index with flash. edit(StaffActivity $staffActivity): return view('staff-activities.edit', compact('staffActivity')). update(Request $request, StaffActivity $staffActivity): same validation, update, redirect with flash. destroy(StaffActivity $staffActivity): delete, redirect with flash.",
+    "5. Edit routes/web.php: inside the auth middleware group, replace the bare Route::get('/staff-activities',...) with Route::resource('staff-activities', StaffActivityController::class). Add use App\\Http\\Controllers\\StaffActivityController; at top if not present.",
+    "6. Create resources/views/staff-activities/create.blade.php: wrap in <x-app-layout>. Full lg:flex layout. Use @include('layouts.farm-sidebar', ['active' => 'staff-activities']). Top header bar (white, university name, date, user dropdown — copy from breedings/index pattern). Page background bg-[#f4f7f3]. Card: rounded-2xl border border-[#dfe8e1] bg-white. Form fields: staff_name (text input), role (select: Veterinarian/Technician/Vocational Worker/Team Leader/Other), assignment (text), shift (text, e.g. 06:00-14:00), activity (text), status (select: Scheduled/In Progress/Completed/Cancelled), activity_date (date input, default today), notes (textarea). Input style: rounded-xl border border-[#d3e1d8] focus:border-green-600 focus:ring-green-600. Primary button: bg-[#123e31] rounded-xl text-white. Secondary (Cancel) button: border border-[#d3e1d8] bg-white rounded-xl text-[#173d31]. Show @if($errors->any()) validation error block. Show session('success')/session('error') flash.",
+    "7. Create resources/views/staff-activities/edit.blade.php: mirror create.blade.php. Change form action to route('staff-activities.update', $staffActivity) with @method('PUT') @csrf. Pre-fill all fields using old('field', $staffActivity->field) — use $staffActivity->activity_date->format('Y-m-d') for date.",
+    "8. Edit resources/views/staff-activities/index.blade.php: a) Replace the inline <aside> block with @include('layouts.farm-sidebar', ['active' => 'staff-activities']). b) Replace hardcoded $scheduleRows @php block with real $activities data. c) Update stat cards: 'On today's schedule' = $todayCount, 'Tasks completed' = $completedCount.'/'.$totalCount, 'Upcoming shift' = $upcomingRecord?->shift ?? '—' and $upcomingRecord?->activity ?? 'No upcoming shifts'. d) In the schedule table, change @foreach($scheduleRows as $row) to @forelse($activities as $activity), accessing $activity->staff_name, $activity->role, $activity->assignment, $activity->shift, $activity->activity, $activity->status. e) Wire 'Add Activity' button to route('staff-activities.create'). f) Replace View/Edit buttons (currently just <button> placeholders) with real links: Edit -> <a href='route(staff-activities.edit,$activity)'>; Delete -> <form method='POST' action='route(staff-activities.destroy,$activity)'>@csrf @method('DELETE')<button type='submit'>...</button></form>. g) Update pagination section to use $activities->links() (Laravel pagination component) or keep manual previous/next links using $activities->previousPageUrl() etc."
+  ],
+  "acceptance_criteria": [
+    "php artisan migrate runs without error",
+    "php artisan route:list --path=staff-activities shows 7 routes",
+    "GET /staff-activities/create renders the create form with all 8 fields",
+    "Submitting the create form stores a record and redirects to index with success flash",
+    "The index table shows real DB records (not hardcoded demo data)",
+    "Edit icon links to the pre-filled edit form; submitting it updates the record",
+    "Delete form removes the record",
+    "Stat cards on index reflect real DB counts"
+  ],
+  "verification": [
+    "php artisan migrate",
+    "php artisan route:list --path=staff-activities",
+    "Open http://localhost/DairyBeefFarm/public/staff-activities/create and fill the form",
+    "Submit and verify record appears in index",
+    "Click Edit, change a field, submit, verify update",
+    "Click Delete, verify removal"
+  ],
+  "blocked_reason": null,
+  "findings": ""
+}
