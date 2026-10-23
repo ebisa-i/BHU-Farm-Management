@@ -48,8 +48,7 @@ Route::middleware('auth')->group(function () {
         ->name('reports.export');
     Route::middleware('auth')->group(function () {
 
-        Route::get('/staff-activities', [StaffActivityController::class, 'index'])
-            ->name('staff-activities.index');
+        Route::resource('staff-activities', StaffActivityController::class);
 
         Route::get('/settings', [SettingController::class, 'index'])
             ->name('settings.index');

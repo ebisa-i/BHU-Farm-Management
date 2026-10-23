@@ -2,7 +2,7 @@
   "id": "FEAT-002",
   "type": "feat",
   "description": "Staff Activities: the table exists (id + timestamps only) and the controller is a stub (index only, returns hardcoded data). Add 8 columns via a new migration, fill the model, build full CRUD in the controller, register a resource route, create create/edit views, and rewrite index.blade.php to use real DB data and live action buttons. Replace the inline sidebar with the shared farm-sidebar partial.",
-  "status": "pending",
+  "status": "completed",
   "steps": [
     "1. Run: php artisan make:migration add_fields_to_staff_activities_table. In the generated migration up(): $table->string('staff_name'); $table->string('role'); $table->string('assignment'); $table->string('shift'); $table->string('activity'); $table->string('status')->default('Scheduled'); $table->date('activity_date'); $table->text('notes')->nullable(); In down(): drop each column. File: database/migrations/<timestamp>_add_fields_to_staff_activities_table.php.",
     "2. Run: php artisan migrate. Verify it exits 0.",
@@ -32,5 +32,5 @@
     "Click Delete, verify removal"
   ],
   "blocked_reason": null,
-  "findings": ""
+  "findings": "Route model binding param confirmed: staff-activities={staff_activity}. Migration added 8 columns (staff_name, role, assignment, shift, activity, status, activity_date, notes) to existing staff_activities table via new migration — did NOT modify original. StaffActivity model filled with $fillable and casts(). Controller replaced with full CRUD: index passes todayCount/completedCount/totalCount/upcomingRecord to view. Route changed from bare get to Route::resource inside auth group — 7 routes confirmed. Index view: inline <aside> replaced with @include farm-sidebar partial, hardcoded $scheduleRows replaced with real $activities, stat cards wired to controller variables, action buttons wired to edit/destroy routes. Create, edit, show views created with matching theme (bg-[#123e31] primary button, rounded-xl inputs, rounded-2xl cards)."
 }

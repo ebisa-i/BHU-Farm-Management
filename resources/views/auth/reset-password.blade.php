@@ -3,7 +3,7 @@
     <h2 class="auth-heading">Choose a new password</h2>
     <p class="auth-sub">Enter your email and a strong new password below.</p>
 
-    <form method="POST" action="{{ route('password.store') }}" style="margin-top:2rem; display:flex; flex-direction:column; gap:1.25rem;">
+    <form method="POST" action="{{ route('password.store') }}" style="margin-top:1.75rem; display:flex; flex-direction:column; gap:1.1rem;">
         @csrf
         <input type="hidden" name="token" value="{{ $request->route('token') }}">
 
@@ -47,9 +47,10 @@
             @enderror
         </div>
 
-        <button type="submit" class="auth-btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <button type="submit" class="auth-btn" style="margin-top:0.25rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
             Reset password
         </button>
