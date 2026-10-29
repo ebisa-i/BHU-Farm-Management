@@ -73,12 +73,14 @@
                         <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Animal Management</h1>
                         <p class="mt-2 text-sm text-gray-600">Track every animal from registration to daily care.</p>
                     </div>
+                    @canDo('create')
                     <a href="{{ route('animals.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#173f31] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#285b43] focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                         Register Animal
                     </a>
+                    @endCanDo
                 </section>
 
                 <section aria-label="Animal statistics" class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -176,11 +178,13 @@
                                                         <circle cx="12" cy="12" r="3" />
                                                     </svg>
                                                 </a>
+                                                @canDo('edit')
                                                 <a href="{{ route('animals.edit', $animal) }}" aria-label="Edit {{ $animal->animal_id }}" class="rounded-lg p-2 text-gray-600 transition hover:bg-[#edf4e9] hover:text-[#173f31] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                         <path d="m16 5 3 3M4 20l4.5-1 11-11a2.1 2.1 0 0 0-3-3l-11 11L4 20Z" />
                                                     </svg>
                                                 </a>
+                                                @endCanDo
                                             </div>
                                         </td>
                                     </tr>

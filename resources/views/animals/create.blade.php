@@ -57,7 +57,7 @@
                             </label>
                             <input id="breed" name="breed" type="text"
                                    value="{{ old('breed') }}"
-                                   placeholder="e.g. Boran, Holstein"
+                                   placeholder="e.g. Borana, Holstein"
                                    class="w-full rounded-lg border-gray-300 focus:border-green-600 focus:ring-green-600">
                         </div>
 

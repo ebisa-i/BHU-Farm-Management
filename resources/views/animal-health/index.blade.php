@@ -50,12 +50,14 @@
                         <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Animal Health</h1>
                         <p class="mt-2 text-sm text-gray-600">Review health records, treatments, and upcoming checkups.</p>
                     </div>
+                    @canDo('create')
                     <a href="{{ route('animal-health.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#173f31] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#285b43] focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                         Record Health Check
                     </a>
+                    @endCanDo
                 </section>
 
                 <section aria-label="Animal health statistics" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -145,9 +147,11 @@
                             <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ $search !== '' || $status !== '' ? 'No matching health records' : 'No health records yet' }}</h3>
                             <p class="mt-2 text-sm text-gray-500">{{ $search !== '' || $status !== '' ? 'Try a different search or status filter.' : 'Record a health check to start tracking animal care.' }}</p>
                             @if ($search === '' && $status === '')
+                                @canDo('create')
                                 <a href="{{ route('animal-health.create') }}" class="mt-5 inline-flex items-center rounded-xl bg-[#173f31] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#285b43]">
                                     Record First Health Check
                                 </a>
+                                @endCanDo
                             @endif
                         </div>
                     @else
@@ -227,6 +231,7 @@
                                                         <circle cx="12" cy="12" r="3" />
                                                     </svg>
                                                 </a>
+                                                @canDo('edit')
                                                 <a href="{{ route('animal-health.edit', $record) }}" aria-label="Edit health record {{ $record->id }}" class="inline-flex rounded-lg p-2 text-gray-600 transition hover:bg-[#edf4e9] hover:text-[#173f31] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -245,6 +250,7 @@
                                                         </svg>
                                                     </button>
                                                 </form>
+                                                @endCanDo
                                             </td>
                                         </tr>
                                     @endforeach

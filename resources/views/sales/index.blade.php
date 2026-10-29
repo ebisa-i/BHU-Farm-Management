@@ -83,12 +83,14 @@
                         <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Sales Management</h1>
                         <p class="mt-2 text-sm text-gray-600">Review milk and cattle sales in Ethiopian birr.</p>
                     </div>
+                    @canDo('create')
                     <a href="{{ route('sales.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#173f31] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#285b43] focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                         Add Sale
                     </a>
+                    @endCanDo
                 </section>
 
                 <nav aria-label="Sale type" class="inline-flex rounded-xl border border-[#e2e9df] bg-white p-1">
@@ -211,6 +213,7 @@
                                                     <circle cx="12" cy="12" r="3" />
                                                 </svg>
                                             </a>
+                                            @canDo('edit')
                                             <a href="{{ route('sales.edit', $sale) }}" aria-label="Edit sale {{ $sale->sale_number }}" class="inline-flex rounded-lg p-2 text-gray-600 transition hover:bg-[#edf4e9] hover:text-[#173f31] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -229,13 +232,16 @@
                                                     </svg>
                                                 </button>
                                             </form>
+                                            @endCanDo
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="9" class="px-6 py-12 text-center">
                                             <p class="font-semibold text-gray-700">{{ $search ? 'No sales match your search.' : 'No '.strtolower($type === 'Milk' ? 'milk' : 'cattle').' sales have been recorded yet.' }}</p>
+                                            @canDo('create')
                                             <a href="{{ route('sales.create') }}" class="mt-2 inline-block text-sm font-semibold text-green-800 underline">Add a sale</a>
+                                            @endCanDo
                                         </td>
                                     </tr>
                                 @endforelse

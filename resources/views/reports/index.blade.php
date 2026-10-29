@@ -328,18 +328,22 @@
                                 </svg>
                                 Print
                             </button>
+                            @canDo('export')
                             <button type="button" onclick="window.print()" class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#123e31] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#205644] focus:outline-none focus:ring-2 focus:ring-[#3d8555] focus:ring-offset-2">
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <path d="M12 3v12m0 0 4-4m-4 4-4-4" /><path d="M5 17v3h14v-3" />
                                 </svg>
                                 Export PDF
                             </button>
+                            @endCanDo
+                            @canDo('export')
                             <a href="{{ $exportUrl }}" class="inline-flex items-center justify-center gap-2 rounded-xl border border-[#d3e1d8] bg-white px-5 py-3 text-sm font-semibold text-[#173d31] transition hover:bg-[#f8fbf8] focus:outline-none focus:ring-2 focus:ring-[#3d8555] focus:ring-offset-2">
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                     <rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M3 15h18M9 3v18M15 3v18" />
                                 </svg>
                                 Export Excel (CSV)
                             </a>
+                            @endCanDo
                         </footer>
                     </section>
 

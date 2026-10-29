@@ -37,14 +37,14 @@ class StaffActivityController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'staff_name'    => ['required', 'string', 'max:255'],
-            'role'          => ['required', 'string', 'max:255'],
-            'assignment'    => ['required', 'string', 'max:255'],
-            'shift'         => ['required', 'string', 'max:255'],
-            'activity'      => ['required', 'string', 'max:255'],
-            'status'        => ['required', Rule::in(['Scheduled', 'In Progress', 'Completed', 'Cancelled'])],
+            'staff_name' => ['required', 'string', 'max:255'],
+            'role' => ['required', 'string', 'max:255'],
+            'assignment' => ['required', 'string', 'max:255'],
+            'shift' => ['required', 'string', 'max:255'],
+            'activity' => ['required', 'string', 'max:255'],
+            'status' => ['required', Rule::in(['Scheduled', 'In Progress', 'Completed', 'Cancelled'])],
             'activity_date' => ['required', 'date'],
-            'notes'         => ['nullable', 'string', 'max:5000'],
+            'notes' => ['nullable', 'string', 'max:5000'],
         ]);
 
         StaffActivity::create($validated);
@@ -67,14 +67,14 @@ class StaffActivityController extends Controller
     public function update(Request $request, StaffActivity $staffActivity)
     {
         $validated = $request->validate([
-            'staff_name'    => ['required', 'string', 'max:255'],
-            'role'          => ['required', 'string', 'max:255'],
-            'assignment'    => ['required', 'string', 'max:255'],
-            'shift'         => ['required', 'string', 'max:255'],
-            'activity'      => ['required', 'string', 'max:255'],
-            'status'        => ['required', Rule::in(['Scheduled', 'In Progress', 'Completed', 'Cancelled'])],
+            'staff_name' => ['required', 'string', 'max:255'],
+            'role' => ['required', 'string', 'max:255'],
+            'assignment' => ['required', 'string', 'max:255'],
+            'shift' => ['required', 'string', 'max:255'],
+            'activity' => ['required', 'string', 'max:255'],
+            'status' => ['required', Rule::in(['Scheduled', 'In Progress', 'Completed', 'Cancelled'])],
             'activity_date' => ['required', 'date'],
-            'notes'         => ['nullable', 'string', 'max:5000'],
+            'notes' => ['nullable', 'string', 'max:5000'],
         ]);
 
         $staffActivity->update($validated);

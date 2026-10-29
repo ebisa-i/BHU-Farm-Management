@@ -154,9 +154,7 @@
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center gap-3 rounded-lg px-2 py-1 text-left transition hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
-                                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#e2eddd] font-bold text-[#32634d]">
-                                    {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
-                                </span>
+                                <x-user-avatar />
                                 <span class="hidden sm:block">
                                     <span class="block text-sm font-semibold text-gray-800">{{ auth()->user()->name ?? 'Farm User' }}</span>
                                     <span class="block text-xs text-gray-500">Farm Management</span>
@@ -181,6 +179,44 @@
             </header>
 
             <div class="space-y-8 p-5 sm:p-8">
+
+                {{-- Profile update success toast --}}
+                @if (session('profile_success'))
+                    <div
+                        x-data="{ show: true }"
+                        x-show="show"
+                        x-init="setTimeout(() => show = false, 4000)"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 translate-y-2"
+                        class="fixed bottom-6 right-6 z-50 flex items-center gap-4 rounded-2xl border border-green-200 bg-white px-5 py-4 shadow-xl"
+                        role="alert"
+                    >
+                        {{-- Avatar --}}
+                        <x-user-avatar size="h-11 w-11" text-size="text-base" />
+
+                        <div class="min-w-0">
+                            <p class="text-sm font-bold text-[#20392f]">Profile updated</p>
+                            <p class="mt-0.5 text-xs text-slate-500">{{ session('profile_success') }}</p>
+                        </div>
+
+                        {{-- Green check badge --}}
+                        <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#e3f5e8] text-[#2d7a46]">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="20 6 9 17 4 12"/>
+                            </svg>
+                        </span>
+
+                        {{-- Close button --}}
+                        <button @click="show = false" class="ml-1 text-gray-400 hover:text-gray-600 focus:outline-none" aria-label="Dismiss">
+                            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                        </button>
+                    </div>
+                @endif
+
                 <section>
                     <p class="text-xs font-bold uppercase tracking-[0.18em] text-[#66856f]">Agricultural Center / Dashboard</p>
                     <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Dashboard</h1>

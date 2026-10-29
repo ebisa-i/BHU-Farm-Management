@@ -9,8 +9,9 @@ use App\Models\InventoryItem;
 use App\Models\MilkProduction;
 use App\Models\Sale;
 use App\Models\StaffActivity;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\View\View;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -331,8 +332,8 @@ class ReportController extends Controller
     }
 
     /**
-     * @param  Builder<\Illuminate\Database\Eloquent\Model>  $query
-     * @return Builder<\Illuminate\Database\Eloquent\Model>
+     * @param  Builder<Model>  $query
+     * @return Builder<Model>
      */
     private function filterByPeriod(
         Builder $query,

@@ -81,12 +81,14 @@
                         <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Breeding</h1>
                         <p class="mt-2 text-sm text-gray-600">Follow services, pregnancies and expected calvings.</p>
                     </div>
+                    @canDo('create')
                     <a href="{{ route('breedings.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#173f31] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#285b43] focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                         Record Breeding
                     </a>
+                    @endCanDo
                 </section>
 
                 <section aria-label="Breeding summary" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -192,6 +194,7 @@
                                                     <circle cx="12" cy="12" r="3" />
                                                 </svg>
                                             </a>
+                                            @canDo('edit')
                                             <a href="{{ route('breedings.edit', $breeding) }}" aria-label="Edit breeding record {{ $breeding->id }}" class="inline-flex rounded-lg p-2 text-gray-600 transition hover:bg-[#edf4e9] hover:text-[#173f31] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -210,13 +213,16 @@
                                                     </svg>
                                                 </button>
                                             </form>
+                                            @endCanDo
                                         </td>
                                     </tr>
                                 @empty
                                     <tr>
                                         <td colspan="8" class="px-6 py-12 text-center">
                                             <p class="font-semibold text-gray-700">{{ $search ? 'No breeding records match your search.' : 'No breeding records have been added yet.' }}</p>
+                                            @canDo('create')
                                             <a href="{{ route('breedings.create') }}" class="mt-2 inline-block text-sm font-semibold text-green-800 underline">Record breeding</a>
+                                            @endCanDo
                                         </td>
                                     </tr>
                                 @endforelse

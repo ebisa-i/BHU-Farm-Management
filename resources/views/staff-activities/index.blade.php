@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     @php
         $statusColors = [
             'In Progress' => ['bg' => 'bg-[#fef3e2]', 'text' => 'text-[#a16207]'],
@@ -19,7 +19,7 @@
             {{-- Top header bar --}}
             <header class="flex flex-wrap items-center justify-between gap-4 border-b border-gray-200 bg-white px-5 py-4 sm:px-8">
                 <div>
-                    <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#66856f]">Bule Hora University · Ethiopia</p>
+                    <p class="text-xs font-bold uppercase tracking-[0.15em] text-[#66856f]">Bule Hora University � Ethiopia</p>
                     <p class="mt-1 text-xs text-gray-500">Agricultural Center</p>
                 </div>
                 <div class="flex items-center gap-4">
@@ -80,6 +80,7 @@
                             <h1 class="mt-3 text-4xl font-bold tracking-tight text-[#20392f] sm:text-5xl">Staff &amp; Activities</h1>
                             <p class="mt-2 text-base text-slate-500">Coordinate assignments and daily farm activities.</p>
                         </div>
+                        @canDo('create')
                         <a href="{{ route('staff-activities.create') }}"
                            class="inline-flex items-center justify-center gap-2 rounded-xl bg-[#123e31] px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-[#205644] focus:outline-none focus:ring-2 focus:ring-[#3d8555] focus:ring-offset-2">
                             <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -87,9 +88,10 @@
                             </svg>
                             Add Activity
                         </a>
+                        @endCanDo
                     </div>
 
-                    {{-- ── Stat cards ── --}}
+                    {{-- -- Stat cards -- --}}
                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                         {{-- On today's schedule --}}
                         <article class="flex flex-col justify-between rounded-2xl border border-[#dfe8e1] bg-white p-6 shadow-sm">
@@ -129,12 +131,12 @@
                                     </svg>
                                 </span>
                             </div>
-                            <p class="mt-5 text-4xl font-bold tracking-tight text-[#20392f]">{{ $upcomingRecord?->shift ?? '—' }}</p>
+                            <p class="mt-5 text-4xl font-bold tracking-tight text-[#20392f]">{{ $upcomingRecord?->shift ?? '�' }}</p>
                             <p class="mt-2 text-sm text-[#3d8555]">{{ $upcomingRecord?->activity ?? 'No upcoming shifts' }}</p>
                         </article>
                     </div>
 
-                    {{-- ── Schedule view toggle ── --}}
+                    {{-- -- Schedule view toggle -- --}}
                     <div class="flex items-center gap-3 rounded-2xl border border-[#dfe8e1] bg-white px-6 py-4 shadow-sm">
                         <span class="text-sm font-semibold text-[#20392f]">Schedule view</span>
                         <div class="flex items-center rounded-lg bg-[#f0f4f1] p-1" role="group" aria-label="Schedule view options">
@@ -145,7 +147,7 @@
                         <span class="text-sm text-slate-500">{{ $activities->total() }} total records</span>
                     </div>
 
-                    {{-- ── Staff schedule table ── --}}
+                    {{-- -- Staff schedule table -- --}}
                     <section class="overflow-hidden rounded-2xl border border-[#dfe8e1] bg-white shadow-sm" aria-labelledby="schedule-title">
                         <div class="px-6 py-5 sm:px-8">
                             <h2 id="schedule-title" class="text-base font-semibold text-[#20392f]">Staff schedule</h2>
@@ -185,6 +187,7 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <div class="flex items-center gap-3">
+                                                    @canDo('edit')
                                                     {{-- Edit --}}
                                                     <a href="{{ route('staff-activities.edit', $activity) }}"
                                                        title="Edit"
@@ -208,13 +211,14 @@
                                                             <span class="sr-only">Delete {{ $activity->staff_name }}</span>
                                                         </button>
                                                     </form>
+                                                    @endCanDo
                                                 </div>
                                             </td>
                                         </tr>
                                     @empty
                                         <tr>
                                             <td colspan="8" class="px-6 py-10 text-center text-sm text-slate-400">
-                                                No activities found. <a href="{{ route('staff-activities.create') }}" class="font-semibold text-[#3d8555] hover:underline">Add the first one.</a>
+                                                No activities found. @canDo('create')<a href="{{ route('staff-activities.create') }}" class="font-semibold text-[#3d8555] hover:underline">Add the first one.</a>@endCanDo
                                             </td>
                                         </tr>
                                     @endforelse
@@ -242,7 +246,7 @@
                         </div>
                     </section>
 
-                    {{-- ── Activity log card ── --}}
+                    {{-- -- Activity log card -- --}}
                     <section class="overflow-hidden rounded-2xl border border-[#dfe8e1] bg-white shadow-sm" aria-labelledby="activity-log-title">
                         <div class="px-6 py-5 sm:px-8">
                             <h2 id="activity-log-title" class="text-base font-semibold text-[#20392f]">Activity log</h2>

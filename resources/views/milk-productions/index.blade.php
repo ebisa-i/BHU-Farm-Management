@@ -75,12 +75,14 @@
                         <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Milk Production</h1>
                         <p class="mt-2 text-sm text-gray-600">Capture yields and spot production changes early.</p>
                     </div>
+                    @canDo('create')
                     <a href="{{ route('milk-productions.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#173f31] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#285b43] focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                         Record Milk
                     </a>
+                    @endCanDo
                 </section>
 
                 <section aria-label="Milk production summary" class="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -194,6 +196,7 @@
                                                         <circle cx="12" cy="12" r="3" />
                                                     </svg>
                                                 </a>
+                                                @canDo('edit')
                                                 <a href="{{ route('milk-productions.edit', $production->representative_id) }}" aria-label="Edit production record" class="inline-flex rounded-lg p-2 text-gray-600 transition hover:bg-[#edf4e9] hover:text-[#173f31] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
@@ -212,6 +215,7 @@
                                                         </svg>
                                                     </button>
                                                 </form>
+                                                @endCanDo
                                             @endif
                                         </td>
                                     </tr>
@@ -219,7 +223,9 @@
                                     <tr>
                                         <td colspan="8" class="px-6 py-12 text-center">
                                             <p class="font-semibold text-gray-700">{{ $search ? 'No production matches your search for this date.' : 'No milk production records for this date.' }}</p>
+                                            @canDo('create')
                                             <a href="{{ route('milk-productions.create') }}" class="mt-2 inline-block text-sm font-semibold text-green-800 underline">Record milk production</a>
+                                            @endCanDo
                                         </td>
                                     </tr>
                                 @endforelse

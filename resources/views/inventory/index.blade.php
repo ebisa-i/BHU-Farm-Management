@@ -18,12 +18,14 @@
                         <h1 class="mt-2 text-3xl font-bold tracking-tight text-[#20392f] sm:text-4xl">Inventory</h1>
                         <p class="mt-2 text-sm text-gray-600">Monitor farm supplies, stock levels, and expiry.</p>
                     </div>
+                    @canDo('create')
                     <a href="{{ route('inventory.create') }}" class="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-[#173f31] px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-[#285b43] focus:outline-none focus:ring-2 focus:ring-green-700 focus:ring-offset-2">
                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
                             <path d="M12 5v14M5 12h14" />
                         </svg>
                         Add Item
                     </a>
+                    @endCanDo
                 </section>
 
                 <section aria-label="Inventory statistics" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -126,7 +128,9 @@
                             <h3 class="mt-4 text-lg font-semibold text-gray-900">{{ $search !== '' || $stock !== 'all' ? 'No matching inventory items' : 'No inventory items yet' }}</h3>
                             <p class="mt-2 text-sm text-gray-500">{{ $search !== '' || $stock !== 'all' ? 'Try a different search or stock filter.' : 'Add farm supplies to start tracking stock and expiry dates.' }}</p>
                             @if ($search === '' && $stock === 'all')
+                                @canDo('create')
                                 <a href="{{ route('inventory.create') }}" class="mt-5 inline-flex items-center rounded-xl bg-[#173f31] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#285b43]">Add First Item</a>
+                                @endCanDo
                             @endif
                         </div>
                     @else
@@ -199,16 +203,20 @@
                                                             <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" />
                                                         </svg>
                                                     </a>
+                                                    @canDo('edit')
                                                     <a href="{{ route('inventory.edit', $item) }}" aria-label="Edit {{ $item->name }}" title="Edit item" class="rounded-lg p-2 text-[#32634d] transition hover:bg-[#edf4e9] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                             <path d="m16 5 3 3M4 20l4-.8L19 8a2.1 2.1 0 0 0-3-3L5 16l-1 4Z" />
                                                         </svg>
                                                     </a>
+                                                    @endCanDo
+                                                    @canDo('create')
                                                     <a href="{{ route('inventory.movements.create', $item) }}" aria-label="Adjust stock for {{ $item->name }}" title="Adjust stock" class="rounded-lg p-2 text-[#32634d] transition hover:bg-[#edf4e9] focus:outline-none focus:ring-2 focus:ring-green-700">
                                                         <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                                             <path d="m12 3 9 5-9 5-9-5 9-5Z" /><path d="M3 8v9l9 5 9-5V8M12 13v9M19 3v6M16 6h6" />
                                                         </svg>
                                                     </a>
+                                                    @endCanDo
                                                 </div>
                                             </td>
                                         </tr>
